@@ -1,0 +1,186 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f1f5f3;
+  padding: 25px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  color: #1b4332;
+  margin-bottom: 25px;
+  font-size: 32px;
+}
+
+/* CARD FORMULARIO */
+.card-formulario {
+  margin-bottom: 25px;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* GRID FORMULARIO */
+.formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* DESCRIPCIÓN */
+mat-form-field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+/* BOTÓN */
+button[mat-raised-button] {
+  height: 45px;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+.formulario button {
+  grid-column: span 2;
+  background-color: #2d6a4f !important;
+  color: white !important;
+}
+
+.formulario button:hover {
+  background-color: #1b4332 !important;
+}
+
+/* MENSAJE VACÍO */
+.mensaje {
+  text-align: center;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 14px;
+  color: #6b7280;
+  font-size: 16px;
+}
+
+/* TABLA */
+.tabla-tareas {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: white;
+}
+
+.mat-mdc-header-cell {
+  background: #d8f3dc;
+  color: #1b4332;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: center;
+}
+
+.mat-mdc-cell {
+  text-align: center;
+  padding: 14px 10px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.mat-mdc-row:hover {
+  background: #f8fafc;
+}
+
+/* BADGES ESTADO */
+.estado-pendiente {
+  background: #e9ecef;
+  color: #495057;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.estado-proceso {
+  background: #d8f3dc;
+  color: #2d6a4f;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.estado-finalizada {
+  background: #95d5b2;
+  color: #1b4332;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* BADGES PRIORIDAD */
+.prioridad-alta {
+  background: #ffccd5;
+  color: #b00020;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.prioridad-media {
+  background: #ffe8b6;
+  color: #8a5a00;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.prioridad-baja {
+  background: #d8f3dc;
+  color: #2d6a4f;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ACCIONES */
+.acciones {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-estado {
+  background-color: #40916c !important;
+  color: white !important;
+}
+
+.btn-estado:hover {
+  background-color: #2d6a4f !important;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+
+  .formulario {
+    grid-template-columns: 1fr;
+  }
+
+  .formulario button {
+    grid-column: span 1;
+  }
+
+  .acciones {
+    flex-direction: column;
+  }
+}
