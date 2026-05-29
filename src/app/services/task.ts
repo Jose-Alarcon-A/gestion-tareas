@@ -71,4 +71,38 @@ export class TaskService {
   guardarTareas(tareas: Task[]){
     localStorage.setItem(this.storageKey, JSON.stringify(tareas));
   }
+
+  cambiarEstado(task: Task): void {
+    if (task.estado === 'Pendiente') {
+      task.estado = 'En proceso';
+    } else if (task.estado === 'En proceso') {
+      task.estado = 'Finalizada';
+    } else {
+      task.estado = 'Pendiente';
+    }
+
+    this.actualizarTareas(task);
+  }
+
+  avanzarEstado(task: Task): void {
+    if (task.estado === 'Pendiente') {
+      task.estado = 'En proceso';
+    } else if (task.estado === 'En proceso') {
+      task.estado = 'Finalizada';
+    } else if (task.estado === 'Finalizada') {
+      task.estado = 'En proceso';
+    }
+
+    this.actualizarTareas(task);
+  }
+
+  retrocederEstado(task: Task): void {
+    if (task.estado === 'En proceso') {
+      task.estado = 'Pendiente';
+    } else if (task.estado === 'Finalizada') {
+      task.estado = 'En proceso';
+    }
+
+    this.actualizarTareas(task);
+  }
 }

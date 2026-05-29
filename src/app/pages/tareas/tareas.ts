@@ -97,15 +97,7 @@ export class Tareas implements OnInit {
   }
 
   cambiarEstado(tarea: Task) {
-    if (tarea.estado === 'Pendiente') {
-        tarea.estado = 'En proceso';
-    } else if (tarea.estado === 'En proceso') {
-      tarea.estado = ' Finalizada';
-    } else {
-      tarea.estado = 'Pendiente';
-    }
-
-    this.taskService.actualizarTareas(tarea);
+    this.taskService.cambiarEstado(tarea);
     this.cargarTareas();
   }
 

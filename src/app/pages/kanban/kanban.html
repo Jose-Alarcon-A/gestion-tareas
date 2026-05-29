@@ -1,0 +1,160 @@
+<div class="contenedor-kanban">
+
+  <mat-card class="kanban-titulo-card">
+    <mat-card-header>
+      <mat-card-title>
+        🗂️ Kanban de Tareas
+      </mat-card-title>
+
+      <mat-card-subtitle>
+        Progresión visual por estado
+      </mat-card-subtitle>
+    </mat-card-header>
+  </mat-card>
+
+  <div class="kanban-board">
+
+    @for(estado of estados; track estado) {
+
+      <mat-card class="kanban-columna">
+
+        <mat-card-header>
+          <mat-card-title>
+            {{ estado }}
+          </mat-card-title>
+
+          <mat-card-subtitle>
+            {{ obtenerTareasPorEstado(estado).length }} tareas
+          </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content
+          class="kanban-lista"
+          cdkDropList
+          [id]="estado"
+          [cdkDropListData]="obtenerTareasPorEstado(estado)"
+          [cdkDropListConnectedTo]="estados"
+          (cdkDropListDropped)="drop($event, estado)">
+
+          @for(tarea of obtenerTareasPorEstado(estado); track tarea.id) {
+
+            <mat-card
+              class="tarea-card"
+              [ngClass]="tarea.prioridad.toLowerCase()"
+              cdkDrag
+              [cdkDragData]="tarea">
+
+              <mat-card-content>
+
+                <div class="campo">
+                  <strong>📌 Título:</strong>
+                  <span>{{ tarea.titulo }}</span>
+                </div>
+
+                <div class="campo">
+                  <strong>Estado:</strong>
+
+                  <mat-chip
+                    class="estado-chip"
+                    [ngClass]="tarea.estado.toLowerCase().replace(' ', '-')">
+
+                    {{ tarea.estado }}
+
+                  </mat-chip>
+                </div>
+
+                <div class="campo">
+                  <strong>Fecha:</strong>
+                  <span>
+                    {{ tarea.fechaCreacion | date:'dd-MM-yyyy' }}
+                  </span>
+                </div>
+
+                <div class="campo">
+                  <strong>Prioridad:</strong>
+
+                  <mat-chip
+                    class="prioridad-chip"
+                    [ngClass]="tarea.prioridad.toLowerCase()">
+
+                    {{ tarea.prioridad }}
+
+                  </mat-chip>
+                </div>
+
+                <div class="descripcion">
+                  <strong>Descripción:</strong>
+                  <p>{{ tarea.descripcion }}</p>
+                </div>
+
+              </mat-card-content>
+
+              <mat-card-actions class="acciones-kanban">
+
+                @if(tarea.estado !== 'Pendiente') {
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="retrocederEstado(tarea)">
+
+                    ←
+
+                  </button>
+                }
+
+                @if(tarea.estado === 'Pendiente') {
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="avanzarEstado(tarea)">
+
+                    Activar
+
+                  </button>
+                }
+
+                @if(tarea.estado === 'En proceso') {
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    (click)="avanzarEstado(tarea)">
+
+                    Finalizar
+
+                  </button>
+                }
+
+                @if(tarea.estado === 'Finalizada') {
+                  <button
+                    mat-raised-button
+                    color="warn"
+                    (click)="avanzarEstado(tarea)">
+
+                    Reabrir
+
+                  </button>
+                }
+
+              </mat-card-actions>
+
+            </mat-card>
+
+          } @empty {
+
+            <mat-card class="columna-vacia">
+              <mat-card-content>
+                Sin tareas
+              </mat-card-content>
+            </mat-card>
+
+          }
+
+        </mat-card-content>
+
+      </mat-card>
+
+    }
+
+  </div>
+
+</div>
