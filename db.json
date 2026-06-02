@@ -1,0 +1,29 @@
+{
+  "tareas": [
+    {
+      "id": "K6yR7jWqjDA",
+      "titulo": "Revisar documentación",
+      "estado": "Pendiente",
+      "prioridad": "Alta",
+      "fechaCreacion": "2026-05-28",
+      "descripcion": "Revisar antecedentes iniciales del caso."
+    },
+    {
+      "id": "lIFzmc3F_Hw",
+      "titulo": "asdsadas",
+      "estado": "Finalizada",
+      "prioridad": "Alta",
+      "fechaCreacion": "2026-05-05",
+      "descripcion": "asdasd"
+    },
+    {
+      "id": "zlrEndnhvNA",
+      "titulo": "sdfsdf",
+      "estado": "En proceso",
+      "prioridad": "Alta",
+      "fechaCreacion": "2026-05-05",
+      "descripcion": "dadsad"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

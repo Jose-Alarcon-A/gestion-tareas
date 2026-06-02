@@ -3,6 +3,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   CdkDragDrop,
   DragDropModule
@@ -26,7 +27,7 @@ import { TaskService } from '../../services/task';
 })
 export class Kanban implements OnInit {
 
-  tareas: Task[] = [];
+  dataSource = new MatTableDataSource<Task>();
 
   estados: string[] = [
     'Pendiente',
@@ -40,24 +41,19 @@ export class Kanban implements OnInit {
     this.cargarTareas();
   }
 
-  cargarTareas(): void {
-    this.tareas = this.taskService.obtenerTareas().map(tarea => {
-      return {
-        ...tarea,
-        estado: tarea.estado.trim()
-      };
+  cargarTareas() {
+    this.taskService.obtenerTareas().subscribe({
+      next: (datos) => {
+        this.dataSource.data = datos;
+      },
+      error: (error) => {
+        console.error('Error al cargar las tareas:', error);
+      }
     });
   }
 
   obtenerTareasPorEstado(estado: string): Task[] {
-    return this.tareas.filter(
-      tarea => tarea.estado === estado
-    );
-  }
-
-  cambiarEstado(tarea: Task): void {
-    this.taskService.cambiarEstado(tarea);
-    this.cargarTareas();
+    return this.dataSource.data.filter(tarea => tarea.estado === estado);
   }
 
   drop(event: CdkDragDrop<Task[]>, nuevoEstado: string): void {
@@ -73,18 +69,52 @@ export class Kanban implements OnInit {
 
     tarea.estado = nuevoEstado;
 
-    this.taskService.actualizarTareas(tarea);
-
+    this.taskService.actualizarTareas(tarea).subscribe({
+      next: () => {
+        console.log('Estado de la tarea actualizado correctamente');
+        this.cargarTareas();
+      },
+      error: (error) => {
+        console.error('Error al actualizar el estado de la tarea:', error);
+      }
+    });
     this.cargarTareas();
   }
 
-  avanzarEstado(tarea: Task): void {
-    this.taskService.avanzarEstado(tarea);
-    this.cargarTareas();
+  avanzarEstado(task: Task): void {
+    if (task.estado === 'Pendiente') {
+      task.estado = 'En proceso';
+    } else if (task.estado === 'En proceso') {
+      task.estado = 'Finalizada';
+    } else if (task.estado === 'Finalizada') {
+      task.estado = 'En proceso';
+    }
+
+    this.taskService.actualizarTareas(task).subscribe({
+      next: () => {
+        console.log('Estado de la tarea avanzado correctamente');
+        this.cargarTareas();
+      },
+      error: (error) => {
+        console.error('Error al avanzar el estado de la tarea:', error);
+      }
+    });
   }
 
-  retrocederEstado(tarea: Task): void {
-    this.taskService.retrocederEstado(tarea);
-    this.cargarTareas();
+  retrocederEstado(task: Task): void {
+    if (task.estado === 'En proceso') {
+      task.estado = 'Pendiente';
+    } else if (task.estado === 'Finalizada') {
+      task.estado = 'En proceso';
+    }
+    this.taskService.actualizarTareas(task).subscribe({
+      next: () => {
+        console.log('Estado de la tarea retrocedido correctamente');
+        this.cargarTareas();
+      },
+      error: (error) => {
+        console.error('Error al retroceder el estado de la tarea:', error);
+      }
+    });
   }
 }

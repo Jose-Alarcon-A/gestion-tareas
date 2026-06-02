@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource} from '@angular/material/table';
 
 import { Task } from '../../models/task';
 import { TaskService } from '../../services/task';
@@ -28,7 +29,8 @@ import { TaskService } from '../../services/task';
   styleUrl: './tareas.css',
 })
 export class Tareas implements OnInit {
-  tareas: Task[] = [];
+
+  dataSource = new MatTableDataSource<Task>();
 
   columnas: string[] = [
     'id',
@@ -56,7 +58,14 @@ export class Tareas implements OnInit {
   }
 
   cargarTareas() {
-    this.tareas = this.taskService.obtenerTareas();
+    this.taskService.obtenerTareas().subscribe({
+      next: (datos) => {
+        this.dataSource.data = datos;
+      },
+      error: (error) => {
+        console.error('Error al cargar las tareas:', error);
+      }
+    });
   }
 
   agregarTarea() {
@@ -80,9 +89,16 @@ export class Tareas implements OnInit {
       descripcion: this.nuevaTarea.descripcion
     }
 
-    this.taskService.agregarTarea(tarea);
-    this.cargarTareas();
-    this.limpiarFormulario();
+    this.taskService.agregarTarea(tarea).subscribe({
+      next: (treaCreada) => {
+        this.dataSource.data = [...this.dataSource.data, treaCreada];
+
+        this.limpiarFormulario();
+      },
+      error: (error) => {
+        console.error('Error al agregar la tarea:', error);
+      }
+    });
   }
 
   eliminarTarea(id: number) {
@@ -92,13 +108,41 @@ export class Tareas implements OnInit {
       return;
     }
 
-    this.taskService.eliminarTarea(id);
-    this.cargarTareas();
+    this.taskService.eliminarTarea(id).subscribe({
+      next: () => {
+        this.dataSource.data = this.dataSource.data.filter((t: Task) => t.id !== id);
+      },
+      error: (error) => {
+        console.error('Error al eliminar la tarea:', error);
+      }
+    });
   }
 
   cambiarEstado(tarea: Task) {
-    this.taskService.cambiarEstado(tarea);
-    this.cargarTareas();
+
+    const tareaActualizada: Task = {
+      ...tarea,
+      estado:
+        tarea.estado === 'Pendiente' ? 'En proceso' :
+        tarea.estado === 'En proceso' ? 'Finalizada' :
+        'Pendiente'
+    };
+
+    this.taskService.actualizarTareas(tareaActualizada).subscribe({
+      next: () => {
+        this.dataSource.data = this.dataSource.data.map(
+          (t: Task) => {
+            if (t.id === tareaActualizada.id){
+              return tareaActualizada;
+            }
+            return t;
+          }
+        );
+      },
+      error: (error) => {
+        console.error('Error al cambiar el estado de la tarea:', error);
+      }
+    });
   }
 
   limpiarFormulario() {
@@ -130,6 +174,10 @@ export class Tareas implements OnInit {
     } else {
       return 'prioridad-baja';
     }
+  }
+
+  existenTareas() {
+    return this.dataSource.data.length > 0;
   }
 
 }
